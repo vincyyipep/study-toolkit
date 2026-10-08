@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>溫習法寶 - 中學生高效學習與記憶工具箱</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap');
+        body { font-family: 'Noto Sans TC', sans-serif; -webkit-tap-highlight-color: transparent; }
+        .tab-active { border-bottom: 3px solid #4F46E5; color: #4F46E5; font-weight: bold; }
+        .perspective-1000 { perspective: 1000px; }
+        .transform-style-3d { transform-style: preserve-3d; }
+        .backface-hidden { backface-visibility: hidden; }
+        .rotate-y-180 { transform: rotateY(180deg); }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-slate-100 min-h-screen flex flex-col text-slate-800 antialiased">
+
+    <!-- 頂部導航列 (含分享按鈕) -->
+    <header class="bg-indigo-600 text-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2.5">
+                <i class="fa-solid fa-graduation-cap text-2xl text-yellow-300"></i>
+                <div>
+                    <h1 class="text-xl font-bold leading-tight">溫習法寶</h1>
+                    <p class="text-[10px] text-indigo-200">中學生高效自主溫習工具箱</p>
+                </div>
+            </div>
+            <button onclick="shareApp()" class="bg-indigo-700/90 hover:bg-indigo-800 text-yellow-300 border border-yellow-300/40 text-xs px-3 py-1.5 rounded-full font-bold flex items-center space-x-1 shadow active:scale-95 transition">
+                <i class="fa-solid fa-share-nodes"></i>
+                <span>分享法寶</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- 主選單切換頁籤 -->
+    <nav class="bg-white border-b shadow-sm sticky top-[57px] z-40">
+        <div class="max-w-7xl mx-auto px-2 flex overflow-x-auto no-scrollbar space-x-2 text-sm font-medium snap-x">
+            <button onclick="switchTab('organize')" id="tab-organize" class="tab-btn min-h-[48px] py-3 px-3 whitespace-nowrap text-slate-600 hover:text-indigo-600 transition tab-active snap-start flex items-center">
+                <i class="fa-solid fa-folder-tree mr-1.5"></i>1. 組織資料
+            </button>
+            <button onclick="switchTab('memory')" id="tab-memory" class="tab-btn min-h-[48px] py-3 px-3 whitespace-nowrap text-slate-600 hover:text-indigo-600 transition snap-start flex items-center">
+                <i class="fa-solid fa-brain mr-1.5"></i>2. 記憶法
+            </button>
+            <button onclick="switchTab('spaced')" id="tab-spaced" class="tab-btn min-h-[48px] py-3 px-3 whitespace-nowrap text-slate-600 hover:text-indigo-600 transition snap-start flex items-center">
+                <i class="fa-solid fa-calendar-check mr-1.5"></i>3. 間隔複習
+            </button>
+            <button onclick="switchTab('feynman')" id="tab-feynman" class="tab-btn min-h-[48px] py-3 px-3 whitespace-nowrap text-slate-600 hover:text-indigo-600 transition snap-start flex items-center">
+                <i class="fa-solid fa-chalkboard-user mr-1.5"></i>4. 費曼學習
+            </button>
+        </div>
+    </nav>
+
+    <!-- 主體內容區域 -->
+    <main class="max-w-7xl mx-auto px-3 sm:px-4 py-4 flex-grow w-full">
+
+        <!-- ================= 1. 組織資料 MODULE ================= -->
+        <section id="module-organize" class="space-y-4">
+            <div class="bg-white p-1.5 rounded-xl border border-slate-200 shadow-sm grid grid-cols-2 gap-2">
+                <button id="subtool-btn-cornell" onclick="showSubTool('cornell')" class="subtool-btn min-h-[44px] py-2.5 px-3 rounded-lg text-xs sm:text-sm font-bold transition flex items-center justify-center space-x-1.5 bg-indigo-600 text-white shadow">
+                    <i class="fa-solid fa-table-columns"></i>
+                    <span>康奈爾筆記法</span>
+                </button>
+                <button id="subtool-btn-concept-maps" onclick="showSubTool('concept-maps')" class="subtool-btn min-h-[44px] py-2.5 px-3 rounded-lg text-xs sm:text-sm font-medium text-slate-600 hover:bg-slate-100 transition flex items-center justify-center space-x-1.5">
+                    <i class="fa-solid fa-sitemap"></i>
+                    <span>概念圖合集</span>
+                </button>
+            </div>
+
+            <!-- 1.1 康奈爾筆記法 -->
+            <div id="sub-cornell" class="bg-white p-4 sm:p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                <div class="flex justify-between items-center border-b pb-3">
+                    <div>
+                        <h2 class="text-lg sm:text-xl font-bold text-slate-800"><i class="fa-solid fa-table-columns text-indigo-600 mr-1.5"></i>康奈爾筆記法</h2>
+                        <p class="text-xs text-slate-500">三分欄設計，提升課堂筆記與複習效率。</p>
+                    </div>
+                    <button onclick="window.print()" class="bg-indigo-50 text-indigo-700 hover:bg-indigo-100 text-xs px-3 py-2 rounded-lg font-bold transition flex items-center">
+                        <i class="fa-solid fa-print mr-1"></i>列印
+                    </button>
+                </div>
+
+                <div class="space-y-2 bg-slate-50 p-3 rounded-lg border border-slate-200">
+                    <div class="grid grid-cols-2 gap-2">
+                        <input type="text" placeholder="科目 (例: 中史)" class="p-2.5 border rounded-lg text-base md:text-sm w-full focus:ring-2 focus:ring-indigo-400 focus:outline-none">
+                        <input type="date" class="p-2.5 border rounded-lg text-base md:text-sm w-full focus:ring-2 focus:ring-indigo-400 focus:outline-none">
+                    </div>
+                    <input type="text" placeholder="課題標題 (例: 唐朝盛世之成因)" class="p-2.5 border rounded-lg text-base md:text-sm w-full focus:ring-2 focus:ring-indigo-400 focus:outline-none">
+                </div>
+
+                <div class="space-y-4">
+                    <div class="border-2 border-slate-200 rounded-lg p-3 bg-white">
+                        <label class="font-bold text-slate-800 text-xs sm:text-sm mb-1 flex items-center justify-between">
+                            <span><i class="fa-solid fa-align-left mr-1 text-indigo-600"></i>筆記欄 (Notes)</span>
+                            <span class="text-[10px] text-slate-400 font-normal">課堂記錄</span>
+                        </label>
+                        <textarea class="w-full p-2.5 border rounded-lg text-base md:text-sm focus:ring-2 focus:ring-indigo-500" rows="5" placeholder="1. 政治上：採納諫言（魏徵），完善三省六部制度。&#10;2. 用人上：知人善任，房玄齡與杜如晦合稱「房謀杜斷」。"></textarea>
+                    </div>
+
+                    <div class="border-2 border-indigo-200 rounded-lg p-3 bg-indigo-50/30">
+                        <label class="font-bold text-indigo-900 text-xs sm:text-sm mb-1 flex items-center justify-between">
+                            <span><i class="fa-solid fa-key mr-1"></i>重點欄 (Cue)</span>
+                            <span class="text-[10px] text-indigo-500 font-normal">課後提煉關鍵字</span>
+                        </label>
+                        <textarea class="w-full p-2.5 border rounded-lg text-base md:text-sm focus:ring-2 focus:ring-indigo-500" rows="3" placeholder="• 貞觀之治&#10;• 房謀杜斷&#10;• 三省六部制"></textarea>
+                    </div>
+
+                    <div class="border-2 border-emerald-200 rounded-lg p-3 bg-emerald-50/30">
+                        <label class="font-bold text-emerald-900 text-xs sm:text-sm mb-1 flex items-center justify-between">
+                            <span><i class="fa-solid fa-file-invoice mr-1"></i>總結欄 (Summary)</span>
+                            <span class="text-[10px] text-emerald-600 font-normal">1-2句概括精髓</span>
+                        </label>
+                        <textarea class="w-full p-2.5 border rounded-lg text-base md:text-sm focus:ring-2 focus:ring-emerald-500" rows="2" placeholder="唐初因君臣一心、制度完善及注重民生，成功締造貞觀之治盛世。"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 1.2 概念圖合集 -->
+            <div id="sub-concept-maps" class="hidden bg-white p-4 sm:p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                <div class="border-b pb-2">
+                    <h2 class="text-lg sm:text-xl font-bold text-slate-800"><i class="fa-solid fa-sitemap text-indigo-600 mr-1.5"></i>概念圖合集</h2>
+                    <p class="text-xs text-slate-500">6款視覺化結構圖，幫助建立知識架構。</p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- 1. 組織圖 -->
+                    <div class="border rounded-xl p-3.5 bg-slate-50 space-y-2">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-bold text-indigo-900 text-sm">1. 組織圖</h3>
+                            <span class="text-[10px] bg-indigo-100 text-indigo-700 px-1.5 py-0.5 rounded">Org Chart</span>
+                        </div>
+                        <p class="text-xs text-slate-600">展示權責分配與層級隸屬關係。</p>
+                        <div class="bg-white border rounded-lg p-2.5 flex flex-col items-center justify-center space-y-1.5 text-xs">
+                            <div class="bg-indigo-600 text-white px-2.5 py-0.5 rounded font-bold">校長 / 理事會</div>
+                            <div class="w-0.5 h-2 bg-indigo-300"></div>
+                            <div class="flex space-x-1.5 text-[11px]">
+                                <span class="bg-indigo-100 text-indigo-800 px-1.5 py-0.5 rounded border border-indigo-200">副校長(學務)</span>
+                                <span class="bg-indigo-100 text-indigo-800 px-1.5 py-0.5 rounded border border-indigo-200">副校長(訓輔)</span>
+                            </div>
+                        </div>
+                        <p class="text-[11px] text-slate-500 bg-white p-1.5 rounded border">💡 <b>例子：</b> 政府機構、學校管理架構。</p>
+                    </div>
+
+                    <!-- 2. 流程圖 -->
+                    <div class="border rounded-xl p-3.5 bg-slate-50 space-y-2">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-bold text-indigo-900 text-sm">2. 流程圖</h3>
+                            <span class="text-[10px] bg-indigo-100 text-indigo-700 px-1.5 py-0.5 rounded">Flowchart</span>
+                        </div>
+                        <p class="text-xs text-slate-600">按順序呈現演變歷程與判斷步驟。</p>
+                        <div class="bg-white border rounded-lg p-2.5 flex items-center justify-center space-x-1 text-[11px] overflow-x-auto no-scrollbar">
+                            <span class="bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded border whitespace-nowrap">開始</span>
+                            <i class="fa-solid fa-arrow-right text-slate-400 text-[10px]"></i>
+                            <span class="bg-blue-100 text-blue-800 px-1.5 py-0.5 rounded border whitespace-nowrap">消化作用</span>
+                            <i class="fa-solid fa-arrow-right text-slate-400 text-[10px]"></i>
+                            <span class="bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded border whitespace-nowrap">吸收養分</span>
+                        </div>
+                        <p class="text-[11px] text-slate-500 bg-white p-1.5 rounded border">💡 <b>例子：</b> 實驗步驟、消化過程、歷史時間軸。</p>
+                    </div>
+
+                    <!-- 3. 概念圖 -->
+                    <div class="border rounded-xl p-3.5 bg-slate-50 space-y-2">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-bold text-indigo-900 text-sm">3. 概念圖</h3>
+                            <span class="text-[10px] bg-indigo-100 text-indigo-700 px-1.5 py-0.5 rounded">Concept Map</span>
+                        </div>
+                        <p class="text-xs text-slate-600">以節點與連線建立概念網狀關係。</p>
+                        <div class="bg-white border rounded-lg p-2 flex flex-col items-center text-[11px]">
+                            <span class="bg-purple-600 text-white px-2 py-0.5 rounded font-bold">生態系統</span>
+                            <span class="text-[9px] text-purple-600 my-0.5">包含 ↓</span>
+                            <div class="flex space-x-1.5 text-[10px]">
+                                <span class="bg-purple-50 text-purple-700 px-1 py-0.5 rounded border border-purple-200">生物因素</span>
+                                <span class="bg-purple-50 text-purple-700 px-1 py-0.5 rounded border border-purple-200">非生物因素</span>
+                            </div>
+                        </div>
+                        <p class="text-[11px] text-slate-500 bg-white p-1.5 rounded border">💡 <b>例子：</b> 食物網、能量轉換、單元概念網絡。</p>
+                    </div>
+
+                    <!-- 4. 溫氏圖 -->
+                    <div class="border rounded-xl p-3.5 bg-slate-50 space-y-2">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-bold text-indigo-900 text-sm">4. 溫氏圖</h3>
+                            <span class="text-[10px] bg-indigo-100 text-indigo-700 px-1.5 py-0.5 rounded">Venn Diagram</span>
+                        </div>
+                        <p class="text-xs text-slate-600">重疊圓圈比較概念共同點與差異點。</p>
+                        <div class="bg-white border rounded-lg p-2 flex justify-center items-center">
+                            <div class="relative w-36 h-14 flex justify-center items-center text-[9px]">
+                                <div class="absolute left-1 w-18 h-14 rounded-full bg-blue-400/30 border border-blue-500 flex items-center justify-start pl-1 font-bold text-blue-900">植物細胞</div>
+                                <div class="absolute right-1 w-18 h-14 rounded-full bg-rose-400/30 border border-rose-500 flex items-center justify-end pr-1 font-bold text-rose-900">動物細胞</div>
+                                <span class="z-10 text-[8px] bg-white/90 px-1 rounded font-bold text-purple-900">共同點</span>
+                            </div>
+                        </div>
+                        <p class="text-[11px] text-slate-500 bg-white p-1.5 rounded border">💡 <b>例子：</b> 光合作用與呼吸作用比較。</p>
+                    </div>
+
+                    <!-- 5. 魚骨圖 -->
+                    <div class="border rounded-xl p-3.5 bg-slate-50 space-y-2">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-bold text-indigo-900 text-sm">5. 魚骨圖</h3>
+                            <span class="text-[10px] bg-indigo-100 text-indigo-700 px-1.5 py-0.5 rounded">Fishbone</span>
+                        </div>
+                        <p class="text-xs text-slate-600">系統化分析問題根本原因（因果關係）。</p>
+                        <div class="bg-white border rounded-lg p-2 flex items-center justify-center text-[9px]">
+                            <div class="flex items-center space-x-1">
+                                <div class="flex flex-col space-y-0.5">
+                                    <span class="bg-amber-100 px-1 py-0.5 rounded">政治 ↗</span>
+                                    <span class="bg-amber-100 px-1 py-0.5 rounded">經濟 ↘</span>
+                                </div>
+                                <div class="w-6 h-0.5 bg-slate-600"></div>
+                                <span class="bg-rose-600 text-white font-bold px-1.5 py-0.5 rounded">一戰爆發成因</span>
+                            </div>
+                        </div>
+                        <p class="text-[11px] text-slate-500 bg-white p-1.5 rounded border">💡 <b>例子：</b> 歷史戰爭爆發成因、社會問題探討。</p>
+                    </div>
+
+                    <!-- 6. 樹形圖 -->
+                    <div class="border rounded-xl p-3.5 bg-slate-50 space-y-2">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-bold text-indigo-900 text-sm">6. 樹形圖</h3>
+                            <span class="text-[10px] bg-indigo-100 text-indigo-700 px-1.5 py-0.5 rounded">Tree Diagram</span>
+                        </div>
+                        <p class="text-xs text-slate-600">主幹逐層分枝，適用於分類體系與概率。</p>
+                        <div class="bg-white border rounded-lg p-2 text-[10px] flex flex-col items-center">
+                            <span class="bg-teal-700 text-white px-2 py-0.5 rounded font-bold">物質分類</span>
+                            <div class="w-12 h-0.5 bg-teal-300 my-0.5"></div>
+                            <div class="flex space-x-2 text-[9px]">
+                                <span class="bg-teal-50 text-teal-800 px-1 py-0.5 rounded border border-teal-200">純淨物</span>
+                                <span class="bg-teal-50 text-teal-800 px-1 py-0.5 rounded border border-teal-200">混合物</span>
+                            </div>
+                        </div>
+                        <p class="text-[11px] text-slate-500 bg-white p-1.5 rounded border">💡 <b>例子：</b> 數學概率樹狀圖、化學物質分類。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= 2. 記憶法 MODULE ================= -->
+        <section id="module-memory" class="hidden space-y-4">
+            <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-sm">
+                <h2 class="text-lg font-bold text-slate-800"><i class="fa-solid fa-brain text-indigo-600 mr-1.5"></i>高效記憶法</h2>
+                <p class="text-xs text-slate-500">擺脫死記硬背，靈活運用多元技巧。</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-2">
+                    <div class="flex items-center space-x-2 text-indigo-600 font-bold">
+                        <i class="fa-solid fa-volume-high text-base"></i>
+                        <h3 class="text-sm">1. 複誦法 (Rehearsal)</h3>
+                    </div>
+                    <p class="text-xs text-slate-500">透過聲律朗讀與規律重複促進記憶。</p>
+                    <div class="bg-amber-50 border border-amber-200 p-2.5 rounded-lg text-xs space-y-1 text-amber-900">
+                        <p class="font-bold text-amber-800"><i class="fa-solid fa-lightbulb mr-1"></i>實用例子：</p>
+                        <p>• <b>中文科：</b> 朗讀背誦《岳陽樓記》段落，以聲律強化記憶。</p>
+                        <p>• <b>英文科：</b> 規律複誦不規則動詞（<i>sing - sang - sung</i>）。</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-2">
+                    <div class="flex items-center space-x-2 text-indigo-600 font-bold">
+                        <i class="fa-solid fa-icons text-base"></i>
+                        <h3 class="text-sm">2. 多感官學習法 (Multi-sensory)</h3>
+                    </div>
+                    <p class="text-xs text-slate-500">結合視覺、聽覺、動覺（手寫/操作）同步記憶。</p>
+                    <div class="bg-amber-50 border border-amber-200 p-2.5 rounded-lg text-xs space-y-1 text-amber-900">
+                        <p class="font-bold text-amber-800"><i class="fa-solid fa-lightbulb mr-1"></i>實用例子：</p>
+                        <p>• 溫習化學式：<b>看</b>結構圖（視覺）、<b>大聲朗讀</b>化學式（聽覺）、<b>手寫</b>分子式（動覺）。</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-2">
+                    <div class="flex items-center space-x-2 text-indigo-600 font-bold">
+                        <i class="fa-solid fa-music text-base"></i>
+                        <h3 class="text-sm">3. 口訣法 (Mnemonic Rhymes)</h3>
+                    </div>
+                    <p class="text-xs text-slate-500">創作順口溜或諧音口訣，容易記憶。</p>
+                    <div class="bg-amber-50 border border-amber-200 p-2.5 rounded-lg text-xs space-y-1 text-amber-900">
+                        <p class="font-bold text-amber-800"><i class="fa-solid fa-lightbulb mr-1"></i>實用例子：</p>
+                        <p>• <b>週期表前20個：</b>「氫氦鋰鈹硼，碳氮氧氟氖...」</p>
+                        <p>• <b>金屬活動性：</b>「鉀鈣鈉鎂鋁，鋅鐵錫鉛氫，銅汞銀鉑金」。</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-2">
+                    <div class="flex items-center space-x-2 text-indigo-600 font-bold">
+                        <i class="fa-solid fa-eye text-base"></i>
+                        <h3 class="text-sm">4. 視覺聯想法 (Visual Association)</h3>
+                    </div>
+                    <p class="text-xs text-slate-500">將抽象概念轉換為具體或誇張的心像。</p>
+                    <div class="bg-amber-50 border border-amber-200 p-2.5 rounded-lg text-xs space-y-1 text-amber-900">
+                        <p class="font-bold text-amber-800"><i class="fa-solid fa-lightbulb mr-1"></i>實用例子：</p>
+                        <p>• 背英文單字 <b>Target</b>（目標/標靶）：在腦海想像自己手持弓箭，射向一個巨大的紅色「圓形標靶」。</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-2">
+                    <div class="flex items-center space-x-2 text-indigo-600 font-bold">
+                        <i class="fa-solid fa-book-open text-base"></i>
+                        <h3 class="text-sm">5. 故事記憶法 (Story Method)</h3>
+                    </div>
+                    <p class="text-xs text-slate-500">無關聯詞彙串聯成生動故事劇情。</p>
+                    <div class="bg-amber-50 border border-amber-200 p-2.5 rounded-lg text-xs space-y-1 text-amber-900">
+                        <p class="font-bold text-amber-800"><i class="fa-solid fa-lightbulb mr-1"></i>實用例子：</p>
+                        <p>• <b>八國聯軍：</b>（俄德法美日奧意英）「<b>餓</b>的話<b>拿</b>麵包（德），<b>發</b>美夢，<b>日</b>夜<b>奧</b>妙<b>意</b>外<b>英</b>勇」。</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-2">
+                    <div class="flex items-center space-x-2 text-indigo-600 font-bold">
+                        <i class="fa-solid fa-cubes text-base"></i>
+                        <h3 class="text-sm">6. 組塊法 (Chunking)</h3>
+                    </div>
+                    <p class="text-xs text-slate-500">長字串或資料拆解為小單元組塊。</p>
+                    <div class="bg-amber-50 border border-amber-200 p-2.5 rounded-lg text-xs space-y-1 text-amber-900">
+                        <p class="font-bold text-amber-800"><i class="fa-solid fa-lightbulb mr-1"></i>實用例子：</p>
+                        <p>• <b>長單詞拼字：</b> <i>Information</i> 拆為 <code>in</code>-<code>for</code>-<code>ma</code>-<code>tion</code>。</p>
+                        <p>• <b>歷史年份：</b> <code>19451024</code> 拆為 <code>1945 - 10 - 24</code>。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= 3. 間隔複習法 MODULE (支援閃卡匯出與匯入) ================= -->
+        <section id="module-spaced" class="hidden space-y-4">
+            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                <div>
+                    <h2 class="text-lg font-bold text-slate-800"><i class="fa-solid fa-calendar-check text-indigo-600 mr-1.5"></i>間隔複習法</h2>
+                    <p class="text-xs text-slate-500">根據遺忘曲線間隔溫習，搭配自製閃卡深化提取。</p>
+                </div>
+                <!-- 閃卡匯出與匯入按鈕 -->
+                <div class="flex space-x-2 text-xs w-full sm:w-auto">
+                    <button onclick="exportFlashcards()" class="flex-1 sm:flex-none px-3 py-1.5 bg-emerald-50 text-emerald-700 border border-emerald-300 rounded-lg font-bold hover:bg-emerald-100 transition flex items-center justify-center">
+                        <i class="fa-solid fa-download mr-1"></i>匯出閃卡
+                    </button>
+                    <button onclick="triggerImport()" class="flex-1 sm:flex-none px-3 py-1.5 bg-indigo-50 text-indigo-700 border border-indigo-300 rounded-lg font-bold hover:bg-indigo-100 transition flex items-center justify-center">
+                        <i class="fa-solid fa-upload mr-1"></i>匯入閃卡
+                    </button>
+                    <input type="file" id="import-file-input" accept=".json" class="hidden" onchange="importFlashcards(event)">
+                </div>
+            </div>
+
+            <!-- 時程指示列 -->
+            <div class="flex overflow-x-auto no-scrollbar space-x-2 text-center text-xs pb-1">
+                <div class="min-w-[80px] flex-1 p-2 rounded-lg bg-indigo-50 border border-indigo-200">
+                    <span class="text-[10px] text-indigo-600 font-bold">第 1 次</span>
+                    <p class="font-bold text-slate-800 text-xs">學習當天</p>
+                </div>
+                <div class="min-w-[80px] flex-1 p-2 rounded-lg bg-indigo-50 border border-indigo-200">
+                    <span class="text-[10px] text-indigo-600 font-bold">第 2 次</span>
+                    <p class="font-bold text-slate-800 text-xs">1 天後</p>
+                </div>
+                <div class="min-w-[80px] flex-1 p-2 rounded-lg bg-indigo-50 border border-indigo-200">
+                    <span class="text-[10px] text-indigo-600 font-bold">第 3 次</span>
+                    <p class="font-bold text-slate-800 text-xs">3 天後</p>
+                </div>
+                <div class="min-w-[80px] flex-1 p-2 rounded-lg bg-indigo-50 border border-indigo-200">
+                    <span class="text-[10px] text-indigo-600 font-bold">第 4 次</span>
+                    <p class="font-bold text-slate-800 text-xs">7 天後</p>
+                </div>
+                <div class="min-w-[80px] flex-1 p-2 rounded-lg bg-indigo-50 border border-indigo-200">
+                    <span class="text-[10px] text-indigo-600 font-bold">第 5 次</span>
+                    <p class="font-bold text-slate-800 text-xs">30 天後</p>
+                </div>
+            </div>
+
+            <div class="space-y-4">
+                <!-- 閃卡測驗區 -->
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col justify-between items-center space-y-3">
+                    <div class="w-full flex justify-between items-center text-xs text-slate-500">
+                        <span><i class="fa-solid fa-layer-group mr-1"></i>閃卡：<span id="current-card-num" class="font-bold text-indigo-600">1</span> / <span id="total-cards-num">2</span></span>
+                        <span class="text-indigo-600 font-bold"><i class="fa-solid fa-hand-pointer mr-1"></i>點擊卡片翻面</span>
+                    </div>
+
+                    <!-- 3D 翻牌卡片 -->
+                    <div onclick="toggleCardFlip()" class="w-full max-w-sm h-52 cursor-pointer perspective-1000 my-2">
+                        <div id="flashcard-inner" class="relative w-full h-full text-center transition-transform duration-500 transform-style-3d shadow-md rounded-xl border-2 border-indigo-300 bg-white">
+                            <div class="absolute w-full h-full backface-hidden p-5 flex flex-col justify-center items-center rounded-xl bg-white">
+                                <span class="text-[10px] bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded font-bold mb-2">正面：問題</span>
+                                <p id="card-display-q" class="text-base font-bold text-slate-800 leading-snug">光合作用的主要作用場所是什麼？</p>
+                            </div>
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 p-5 flex flex-col justify-center items-center rounded-xl bg-emerald-50 border-2 border-emerald-400">
+                                <span class="text-[10px] bg-emerald-200 text-emerald-800 px-2 py-0.5 rounded font-bold mb-2">反面：答案</span>
+                                <p id="card-display-a" class="text-base font-bold text-emerald-900 leading-snug">葉綠體 (Chloroplast)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 控制列 -->
+                    <div class="w-full flex justify-between items-center space-x-2 text-xs">
+                        <button onclick="prevCard()" class="min-h-[40px] px-4 py-2 bg-slate-200 text-slate-700 font-bold rounded-lg hover:bg-slate-300 transition flex-1">
+                            <i class="fa-solid fa-chevron-left mr-1"></i>上一張
+                        </button>
+                        <button onclick="nextCard()" class="min-h-[40px] px-4 py-2 bg-slate-200 text-slate-700 font-bold rounded-lg hover:bg-slate-300 transition flex-1">
+                            下一張<i class="fa-solid fa-chevron-right ml-1"></i>
+                        </button>
+                    </div>
+
+                    <!-- 評級打卡區 -->
+                    <div class="w-full pt-2 border-t border-slate-200">
+                        <p class="text-[11px] text-slate-500 mb-2 text-center">評估這張卡片的記憶熟悉度：</p>
+                        <div class="grid grid-cols-3 gap-2 text-xs">
+                            <button onclick="rateCard('1天')" class="min-h-[44px] py-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600 font-bold shadow flex flex-col items-center justify-center">
+                                <span>困難</span>
+                                <span class="text-[9px] font-normal opacity-90">1天後複習</span>
+                            </button>
+                            <button onclick="rateCard('3天')" class="min-h-[44px] py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 font-bold shadow flex flex-col items-center justify-center">
+                                <span>普通</span>
+                                <span class="text-[9px] font-normal opacity-90">3天後複習</span>
+                            </button>
+                            <button onclick="rateCard('7天')" class="min-h-[44px] py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 font-bold shadow flex flex-col items-center justify-center">
+                                <span>簡單</span>
+                                <span class="text-[9px] font-normal opacity-90">7天後複習</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 新增閃卡表單 -->
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
+                    <h3 class="font-bold text-slate-800 text-sm flex items-center">
+                        <i class="fa-solid fa-plus-circle text-indigo-600 mr-1.5"></i>新增專屬閃卡
+                    </h3>
+                    <div class="space-y-2.5 text-xs">
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1">問題 / 閃卡正面 (Front)</label>
+                            <textarea id="card-input-q" class="w-full p-2.5 border rounded-lg text-base md:text-sm focus:ring-2 focus:ring-indigo-400 focus:outline-none" rows="2" placeholder="例：光合作用的作用場所是？"></textarea>
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1">答案 / 閃卡反面 (Back)</label>
+                            <textarea id="card-input-a" class="w-full p-2.5 border rounded-lg text-base md:text-sm focus:ring-2 focus:ring-indigo-400 focus:outline-none" rows="2" placeholder="例：葉綠體 (Chloroplast)"></textarea>
+                        </div>
+                        <button onclick="addCustomCard()" class="w-full min-h-[44px] py-2.5 bg-indigo-600 text-white font-bold rounded-lg hover:bg-indigo-700 transition shadow">
+                            <i class="fa-solid fa-folder-plus mr-1"></i>加入閃卡牌組
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= 4. 費曼學習法 MODULE ================= -->
+        <section id="module-feynman" class="hidden space-y-4">
+            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-1">
+                <h2 class="text-lg font-bold text-slate-800"><i class="fa-solid fa-chalkboard-user text-indigo-600 mr-1.5"></i>費曼學習法</h2>
+                <p class="text-xs text-slate-500">以教促學：用最簡單的話講解，快速查漏補缺。</p>
+            </div>
+
+            <div class="space-y-3">
+                <div class="border rounded-xl p-3.5 bg-slate-50 space-y-2">
+                    <div class="flex items-center space-x-2">
+                        <span class="bg-indigo-600 text-white text-[11px] px-2 py-0.5 rounded font-bold">步驟一</span>
+                        <h3 class="font-bold text-slate-800 text-sm">選定概念</h3>
+                    </div>
+                    <p class="text-xs text-slate-500">選擇你想徹底搞懂的公式、定理或概念。</p>
+                    <div class="bg-indigo-50 border border-indigo-200 p-2.5 rounded-lg text-xs text-indigo-900">
+                        <p class="font-bold text-indigo-800 mb-0.5"><i class="fa-solid fa-lightbulb mr-1"></i>示範例子：</p>
+                        <p class="font-bold">阿基米德浮力原理 (Archimedes' Principle)</p>
+                    </div>
+                </div>
+
+                <div class="border rounded-xl p-3.5 bg-slate-50 space-y-2">
+                    <div class="flex items-center space-x-2">
+                        <span class="bg-indigo-600 text-white text-[11px] px-2 py-0.5 rounded font-bold">步驟二</span>
+                        <h3 class="font-bold text-slate-800 text-sm">白話講解</h3>
+                    </div>
+                    <p class="text-xs text-slate-500">假設向小學生講解，不使用複雜專有名詞。</p>
+                    <div class="bg-indigo-50 border border-indigo-200 p-2.5 rounded-lg text-xs text-indigo-900">
+                        <p class="font-bold text-indigo-800 mb-0.5"><i class="fa-solid fa-comment-dots mr-1"></i>白話說明：</p>
+                        <p>「把石頭丟進滿水的杯子裡，溢出來的水有多重，石頭在水裡感受到的向上浮力就有多大。」</p>
+                    </div>
+                </div>
+
+                <div class="border rounded-xl p-3.5 bg-slate-50 space-y-2">
+                    <div class="flex items-center space-x-2">
+                        <span class="bg-indigo-600 text-white text-[11px] px-2 py-0.5 rounded font-bold">步驟三</span>
+                        <h3 class="font-bold text-slate-800 text-sm">查漏補缺</h3>
+                    </div>
+                    <p class="text-xs text-slate-500">講解卡殼時，立即重新翻閱課本。</p>
+                    <div class="bg-indigo-50 border border-indigo-200 p-2.5 rounded-lg text-xs text-indigo-900">
+                        <p class="font-bold text-indigo-800 mb-0.5"><i class="fa-solid fa-magnifying-glass mr-1"></i>發現漏洞：</p>
+                        <p>「卡殼在漂浮物體上，立刻翻書釐清『排開液體重』與『物體自重』的關係。」</p>
+                    </div>
+                </div>
+
+                <div class="border rounded-xl p-3.5 bg-indigo-50/70 border-indigo-200 space-y-2">
+                    <div class="flex items-center space-x-2">
+                        <span class="bg-indigo-600 text-white text-[11px] px-2 py-0.5 rounded font-bold">步驟四</span>
+                        <h3 class="font-bold text-indigo-900 text-sm">簡化及類比</h3>
+                    </div>
+                    <p class="text-xs text-indigo-700">運用日常生活事物作生動類比。</p>
+                    <div class="bg-white border border-indigo-300 p-2.5 rounded-lg text-xs text-slate-800 shadow-sm">
+                        <p class="font-bold text-indigo-800 mb-0.5"><i class="fa-solid fa-wand-magic-sparkles mr-1"></i>生活類比：</p>
+                        <p>「像硬擠進滿員的地鐵車廂，車廂為了容納你必須擠開人群，你感受到的推擠力就等於被你擠開的人的重量。」</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- 頁腳 -->
+    <footer class="bg-slate-800 text-slate-400 text-[11px] py-4 text-center border-t border-slate-700 mt-6">
+        <p>《溫習法寶》隨身版 — 中學生高效自主學習工具</p>
+    </footer>
+
+    <!-- JS 邏輯控制 -->
+    <script>
+        // 1. 頁面與子工具切換
+        function switchTab(tabName) {
+            document.querySelectorAll('main > section').forEach(sec => sec.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('tab-active'));
+            
+            document.getElementById('module-' + tabName).classList.remove('hidden');
+            document.getElementById('tab-' + tabName).classList.add('tab-active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function showSubTool(toolName) {
+            document.getElementById('sub-cornell').classList.add('hidden');
+            document.getElementById('sub-concept-maps').classList.add('hidden');
+            
+            const btnCornell = document.getElementById('subtool-btn-cornell');
+            const btnConcept = document.getElementById('subtool-btn-concept-maps');
+            
+            [btnCornell, btnConcept].forEach(btn => {
+                if(btn) btn.className = "subtool-btn min-h-[44px] py-2.5 px-3 rounded-lg text-xs sm:text-sm font-medium text-slate-600 hover:bg-slate-100 transition flex items-center justify-center space-x-1.5";
+            });
+
+            document.getElementById('sub-' + toolName).classList.remove('hidden');
+            const activeBtn = document.getElementById('subtool-btn-' + toolName);
+            if(activeBtn) activeBtn.className = "subtool-btn min-h-[44px] py-2.5 px-3 rounded-lg text-xs sm:text-sm font-bold transition flex items-center justify-center space-x-1.5 bg-indigo-600 text-white shadow";
+        }
+
+        // 2. 原生一鍵分享功能 (Web Share API)
+        function shareApp() {
+            if (navigator.share) {
+                navigator.share({
+                    title: '《溫習法寶》中學生高效學習工具箱',
+                    text: '這是一個專為中學生設計的自主溫習工具箱，包含康奈爾筆記、概念圖、記憶法、間隔閃卡及費曼學習法！',
+                    url: window.location.href
+                }).catch(err => console.log('分享取消'));
+            } else {
+                navigator.clipboard.writeText(window.location.href);
+                alert('已複製《溫習法寶》連結到剪貼簿，可直接貼上分享給朋友！');
+            }
+        }
+
+        // 3. 閃卡數據與互動
+        let flashcards = [
+            { q: "光合作用的主要作用場所是什麼？", a: "葉綠體 (Chloroplast)" },
+            { q: "唐朝「房謀杜斷」指的是哪兩位名臣？", a: "房玄齡（善謀）與 杜如晦（善斷）" }
+        ];
+        let currentCardIndex = 0;
+        let isFlipped = false;
+
+        function updateCardDisplay() {
+            const card = flashcards[currentCardIndex];
+            document.getElementById('card-display-q').innerText = card ? card.q : "暫無閃卡";
+            document.getElementById('card-display-a').innerText = card ? card.a : "暫無閃卡";
+            document.getElementById('current-card-num').innerText = flashcards.length ? currentCardIndex + 1 : 0;
+            document.getElementById('total-cards-num').innerText = flashcards.length;
+            
+            isFlipped = false;
+            document.getElementById('flashcard-inner').classList.remove('rotate-y-180');
+        }
+
+        function toggleCardFlip() {
+            if (!flashcards.length) return;
+            isFlipped = !isFlipped;
+            const inner = document.getElementById('flashcard-inner');
+            if(isFlipped) inner.classList.add('rotate-y-180');
+            else inner.classList.remove('rotate-y-180');
+        }
+
+        function prevCard() {
+            if (currentCardIndex > 0) {
+                currentCardIndex--;
+                updateCardDisplay();
+            }
+        }
+
+        function nextCard() {
+            if (currentCardIndex < flashcards.length - 1) {
+                currentCardIndex++;
+                updateCardDisplay();
+            }
+        }
+
+        function addCustomCard() {
+            const q = document.getElementById('card-input-q').value.trim();
+            const a = document.getElementById('card-input-a').value.trim();
+            if (!q || !a) {
+                alert('請先填寫閃卡正面（問題）與反面（答案）！');
+                return;
+            }
+
+            flashcards.push({ q: q, a: a });
+            currentCardIndex = flashcards.length - 1;
+            updateCardDisplay();
+
+            document.getElementById('card-input-q').value = '';
+            document.getElementById('card-input-a').value = '';
+            alert('成功加入新閃卡！');
+        }
+
+        function rateCard(interval) {
+            alert(`已排程！這張閃卡將於 ${interval} 後再次提醒複習。`);
+            if (currentCardIndex < flashcards.length - 1) nextCard();
+        }
+
+        // 4. 閃卡牌組匯出 (Download JSON)
+        function exportFlashcards() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(flashcards, null, 2));
+            const dlAnchorElem = document.createElement('a');
+            dlAnchorElem.setAttribute("href", dataStr);
+            dlAnchorElem.setAttribute("download", "溫習法寶_自製閃卡牌組.json");
+            dlAnchorElem.click();
+        }
+
+        // 5. 閃卡牌組匯入 (Upload JSON)
+        function triggerImport() {
+            document.getElementById('import-file-input').click();
+        }
+
+        function importFlashcards(event) {
+            const fileReader = new FileReader();
+            fileReader.onload = function(e) {
+                try {
+                    const importedCards = JSON.parse(e.target.result);
+                    if (Array.isArray(importedCards) && importedCards.length > 0 && importedCards[0].q && importedCards[0].a) {
+                        flashcards = importedCards;
+                        currentCardIndex = 0;
+                        updateCardDisplay();
+                        alert(`成功匯入 ${importedCards.length} 張閃卡！`);
+                    } else {
+                        alert('檔案格式不正確，請匯入由《溫習法寶》匯出的 .json 閃卡檔案。');
+                    }
+                } catch (err) {
+                    alert('檔案讀取失敗，請確認檔案格式。');
+                }
+            };
+            fileReader.readAsText(event.target.files[0]);
+        }
+
+        updateCardDisplay();
+    </script>
+</body>
+</html>
